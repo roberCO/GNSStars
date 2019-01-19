@@ -1,4 +1,4 @@
-package com.gnssis.rco.gnsstars;
+package com.gnssis.rco.gnsstars_gnssisteam;
 
 import org.junit.Test;
 

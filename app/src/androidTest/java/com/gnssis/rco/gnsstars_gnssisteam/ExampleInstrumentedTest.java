@@ -1,4 +1,4 @@
-package com.gnssis.rco.gnsstars;
+package com.gnssis.rco.gnsstars_gnssisteam;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.gnssis.rco.gnsstars", appContext.getPackageName());
+        assertEquals("com.gnssis.rco.gnsstars_gnssisteam", appContext.getPackageName());
     }
 }
