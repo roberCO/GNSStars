@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "835238709217",
+    "firebase_url": "https://gnssis-rn.firebaseio.com",
+    "project_id": "gnssis-rn",
+    "storage_bucket": "gnssis-rn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835238709217:android:ea9f50fb459b22e4",
+        "android_client_info": {
+          "package_name": "com.gnssis.rco.gnsstars_gnssisteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835238709217-g59iuee37i2qv9hmeom3iha4qu916ori.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWZiJ3NEqjr9l8PyCUwVTga55fnRRYmsw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
