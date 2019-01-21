@@ -1,41 +1,39 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.media.VolumeShaper;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.Activity;
-import android.content.Context;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import com.gnssis.rco.gnsstars_gnssisteam.R;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.constants.Style;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MapFragment.OnFragmentInteractionListener} interface
+ * {@link MainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MapFragment#newInstance} factory method to
+ * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class MapFragment extends Fragment {
-    MapView myOpenMapView = null;
-    MyLocationNewOverlay myLocation = null;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,104 +44,85 @@ public class MapFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private MapView mMapView;
 
-    public MapFragment() {
-        // Required empty public constructor
+    public static MapFragment create() {
+        return new MapFragment();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
-        MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    // Create the instance
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         Context ctx = getActivity().getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Mapbox.getInstance(ctx, "pk.eyJ1Ijoic2dvbmdvcmEiLCJhIjoiY2pyNjkxemhiMGR4MzQ4bXRkZHdhc2g4ayJ9.74xaSv0UpPG3bsZU0Z865w");
     }
 
+    // Create the map
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_map, null);
-        myOpenMapView = v.findViewById(R.id.map);
-        myOpenMapView.setTileSource(TileSourceFactory.MAPNIK);
-        myOpenMapView.setMultiTouchControls(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_map, container, false);
+        mMapView = v.findViewById(R.id.map);
+        mMapView.onCreate(savedInstanceState); // If this line is omitted there is a native crash in the MapBox library
 
-        IMapController mapController =  myOpenMapView.getController();
-        mapController.setZoom(12.5);
-        GeoPoint startPoint = new GeoPoint(40.416775, -3.70379);
-        mapController.setCenter(startPoint);
-
-        myLocation = new MyLocationNewOverlay(myOpenMapView);
-        myLocation.enableFollowLocation();
-        myLocation.enableMyLocation();
-        myOpenMapView.getOverlays().add(myLocation);
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap mapboxMap) {
+                // Retiro
+                mapboxMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(40.4166201, -3.6862559))
+                        .title(getString(R.string.draw_marker_options_title))
+                        .snippet(getString(R.string.draw_marker_options_snippet)));
+                // Real Palace
+                mapboxMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(40.418558, -3.713169))
+                        .title(getString(R.string.draw_marker_options_title))
+                        .snippet(getString(R.string.draw_marker_options_snippet)));
+            }
+        });
 
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mMapView.onStart();
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mMapView.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
     }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    public void onResume(){
-        super.onResume();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        myOpenMapView.onResume(); //needed for compass, my location overlays, v6.0.0 and up
-    }
-    public void onPause(){
-        super.onPause();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        myOpenMapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
-    }
 }
+  

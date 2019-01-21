@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.gnssis.rco.gnsstars_gnssisteam"
-        minSdkVersion 15
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -28,9 +28,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
-    implementation 'org.osmdroid:osmdroid-android:6.0.3'
-    implementation 'org.osmdroid:osmdroid-wms:6.0.3'
-    implementation 'org.osmdroid:osmdroid-mapsforge:6.0.3'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

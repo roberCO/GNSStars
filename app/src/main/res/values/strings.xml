@@ -2,7 +2,12 @@
     <string name="app_name">GNSStars_GNSSisTeam</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    
+    <string name="draw_marker_options_title">Title</string>
+    <string name="draw_marker_options_snippet">Snippet</string>
+
+    }
+    });
+
     <string-array name="corrections">
         <item>Corrections</item>
         <item>Correction 1</item>
