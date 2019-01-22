@@ -5,25 +5,40 @@ import android.media.VolumeShaper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
-
+import android.widget.Toast;
 
 import com.gnssis.rco.gnsstars_gnssisteam.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +48,7 @@ import com.mapbox.mapboxsdk.maps.SupportMapFragment;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,11 +58,39 @@ public class MapFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private Point point;
+    private Double test_latitude;
+
     private OnFragmentInteractionListener mListener;
+    private MapboxMap mapboxMap;
     private MapView mMapView;
+    private PermissionsManager permissionsManager;
 
     public static MapFragment create() {
         return new MapFragment();
+    }
+
+    public void retrievePoints(int id){
+        // FIREBASE SAMPLE
+        // Get a reference to points
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("points/" + id);
+
+        // Attach a listener to read the data at our points reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                point = dataSnapshot.getValue(Point.class);
+                System.out.println("Retrieved point from Firebase: " + point);
+                System.out.println("Retrieved latitude from Firebase: " + point.latitude);
+                System.out.println("Retrieved longitude from Firebase: " + point.longitude);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     // Create the instance
@@ -68,23 +111,85 @@ public class MapFragment extends Fragment {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
+                // retrievePoints(1);
+                // System.out.println("Test latitude from Firebase: " + test_latitude);
                 // Retiro
                 mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(40.4166201, -3.6862559))
-                        .title(getString(R.string.draw_marker_options_title))
-                        .snippet(getString(R.string.draw_marker_options_snippet)));
+                        .position(new LatLng(40.415791, -3.683848))
+                        .title(getString(R.string.draw_marker_options_title_retiro))
+                        .snippet(getString(R.string.draw_marker_options_snippet_retiro)));
                 // Real Palace
                 mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(40.418558, -3.713169))
-                        .title(getString(R.string.draw_marker_options_title))
-                        .snippet(getString(R.string.draw_marker_options_snippet)));
+                        .position(new LatLng(40.418425, -3.713100))
+                        .title(getString(R.string.draw_marker_options_title_palace))
+                        .snippet(getString(R.string.draw_marker_options_snippet_palace)));
             }
         });
 
         return v;
     }
 
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+
+    public void onMapReady(MapboxMap mapboxMap) {
+        MapFragment.this.mapboxMap = mapboxMap;
+//        enableLocationComponent();
+    }
+//
+//    @SuppressWarnings( {"MissingPermission"})
+//    private void enableLocationComponent() {
+//// Check if permissions are enabled and if not request
+//        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+//
+//            LocationComponentOptions options = LocationComponentOptions.builder(this)
+//                    .trackingGesturesManagement(true)
+//                    .accuracyColor(ContextCompat.getColor(this, R.color.mapboxGreen))
+//                    .build();
+//
+//            // Get an instance of the component
+//            LocationComponent locationComponent = mapboxMap.getLocationComponent();
+//
+//            // Activate with options
+//            locationComponent.activateLocationComponent(this, options);
+//
+//            // Enable to make component visible
+//            locationComponent.setLocationComponentEnabled(true);
+//
+//            // Set the component's camera mode
+//            locationComponent.setCameraMode(CameraMode.TRACKING);
+//            locationComponent.setRenderMode(RenderMode.COMPASS);
+//        } else {
+//            permissionsManager = new PermissionsManager(this);
+//            permissionsManager.requestLocationPermissions(this);
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
+//
+//    @Override
+//    public void onExplanationNeeded(List<String> permissionsToExplain) {
+//        Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_LONG).show();
+//    }
+//
+//    @Override
+//    public void onPermissionResult(boolean granted) {
+//        if (granted) {
+//            enableLocationComponent();
+//        } else {
+//            Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
+//            finish();
+//        }
+//    }
+
     @Override
+    @SuppressWarnings( {"MissingPermission"})
     public void onStart() {
         super.onStart();
         mMapView.onStart();
@@ -94,12 +199,6 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
     }
 
     @Override
@@ -115,14 +214,20 @@ public class MapFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
     }
 }
-  

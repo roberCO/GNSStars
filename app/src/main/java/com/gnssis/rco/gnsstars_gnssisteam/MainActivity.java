@@ -80,26 +80,6 @@ public class MainActivity extends AppCompatActivity implements  MainFragment.OnF
 //            }
 //
 //        });
-
-        // FIREBASE SAMPLE
-        // Get a reference to points
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("points/1");
-
-        // Attach a listener to read the data at our points reference
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Point point = dataSnapshot.getValue(Point.class);
-                System.out.println("Retrieved point from Firebase: " + point);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
     }
 
 
