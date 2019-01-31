@@ -1,44 +1,25 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
 import android.content.Context;
-import android.media.VolumeShaper;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
-import com.gnssis.rco.gnsstars_gnssisteam.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentOptions;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.SupportMapFragment;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +39,7 @@ public class MapFragment extends Fragment{
     private String mParam1;
     private String mParam2;
 
-    private Point point;
+    private Message message;
     private Double test_latitude;
 
     private OnFragmentInteractionListener mListener;
@@ -80,10 +61,10 @@ public class MapFragment extends Fragment{
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                point = dataSnapshot.getValue(Point.class);
-                System.out.println("Retrieved point from Firebase: " + point);
-                System.out.println("Retrieved latitude from Firebase: " + point.latitude);
-                System.out.println("Retrieved longitude from Firebase: " + point.longitude);
+                message = dataSnapshot.getValue(Message.class);
+                System.out.println("Retrieved point from Firebase: " + message);
+                System.out.println("Retrieved latitude from Firebase: " + message.getLatitude());
+                System.out.println("Retrieved longitude from Firebase: " + message.getLongitude());
             }
 
             @Override
