@@ -1,4 +1,4 @@
-package com.gnssis.rco.gnsstars_gnssisteam;
+package com.gnssis.rco.gnsstars_gnssisteam.entity;
 
 public class Message {
 
@@ -9,6 +9,19 @@ public class Message {
     private String objectType;
     private String mediaURL;
     private String title;
+
+    public Message(String description, String latitude, String longitude, String objectName, String objectType, String mediaURL, String title) {
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.objectName = objectName;
+        this.objectType = objectType;
+        this.mediaURL = mediaURL;
+        this.title = title;
+    }
+
+    public Message() {
+    }
 
     public String getDescription() {
         return description;
@@ -64,5 +77,18 @@ public class Message {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "description='" + description + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", objectName='" + objectName + '\'' +
+                ", objectType='" + objectType + '\'' +
+                ", mediaURL='" + mediaURL + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }
