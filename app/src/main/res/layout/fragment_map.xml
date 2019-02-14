@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:visibility="visible">
 
-    <!-- Set the starting camera position and map style using xml-->
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/map"
         android:layout_width="0dp"
@@ -18,40 +17,48 @@
         mapbox:layout_constraintTop_toTopOf="parent"
         mapbox:mapbox_cameraTargetLat="40.416775"
         mapbox:mapbox_cameraTargetLng="-3.703790"
-        mapbox:mapbox_cameraZoom="11"
-        mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets">
+        mapbox:mapbox_cameraZoom="11">
 
     </com.mapbox.mapboxsdk.maps.MapView>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/icon1"
-        android:contentDescription="TODO"
-        mapbox:layout_constraintBottom_toBottomOf="parent"
-        mapbox:layout_constraintStart_toStartOf="parent" />
+    <ImageButton
+        android:id="@+id/selectConstellation"
+        style="@android:style/Widget.Material.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@null"
+        android:contentDescription="@string/constellation_selection"
+        android:elevation="4dp"
+        mapbox:layout_constraintStart_toStartOf="parent"
+        mapbox:layout_constraintTop_toTopOf="parent"
+        mapbox:srcCompat="@drawable/ic_select_constellation" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/icon2"
-        mapbox:layout_constraintBottom_toBottomOf="parent"
-        mapbox:layout_constraintEnd_toEndOf="parent" />
+    <ImageButton
+        android:id="@+id/selectLayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@null"
+        android:contentDescription="@string/layer_selection"
+        android:elevation="4dp"
+        android:src="@drawable/ic_select_layer"
+        mapbox:layout_constraintStart_toStartOf="parent"
+        mapbox:layout_constraintTop_toBottomOf="@+id/selectConstellation" />
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginEnd="16dp"
+    <ImageButton
+        android:id="@+id/getLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        mapbox:layout_constraintBottom_toTopOf="@+id/imageView2"
+        android:contentDescription="@string/get_location"
+        android:elevation="4dp"
+        android:background="@null"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
         mapbox:layout_constraintEnd_toEndOf="parent"
-        mapbox:srcCompat="@android:drawable/ic_menu_mylocation" />
+        mapbox:srcCompat="@drawable/ic_get_position" />
 
 </android.support.constraint.ConstraintLayout>

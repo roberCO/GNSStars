@@ -6,6 +6,18 @@
     <string name="draw_marker_options_snippet_retiro">Nature, Sun, Day</string>
     <string name="draw_marker_options_title_palace">Real Palace</string>
     <string name="draw_marker_options_snippet_palace">Building, Night, Moon</string>
+    <string name="pirates">Pirates</string>
+    <string name="ninjas">Ninjas</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="red">Red</string>
+    <string name="blue">Blue</string>
+    <string name="gps_selection">GPS</string>
+    <string name="galileo_selection">Galileo</string>
+    <string name="constellation_selection">Constellation selection</string>
+    <string name="layer_selection">Layer selection</string>
+    <string name="get_location">Get location</string>
 
     <!--Basic user location permission toasts-->
     <string name="user_location_permission_explanation">This app needs location permissions in order to show its functionality.</string>

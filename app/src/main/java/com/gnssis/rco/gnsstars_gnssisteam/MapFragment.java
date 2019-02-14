@@ -1,12 +1,28 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ContextMenu;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v4.app.Fragment;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
 
 import com.gnssis.rco.gnsstars_gnssisteam.entity.Message;
 import com.google.firebase.database.DataSnapshot;
@@ -15,12 +31,37 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
+import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.geojson.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+
+import com.gnssis.rco.gnsstars_gnssisteam.LocalPoint;
+import com.mapbox.mapboxsdk.style.sources.VectorSource;
+
+import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleRadius;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,29 +71,63 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment{
+public class MapFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private SymbolManager symbolManager;
+    private List<Symbol> symbols = new ArrayList<>();
+    private MapView mapView;
 
+    private boolean gps_selected;
+    private boolean galileo_selected;
+    private boolean location_enabled;
+    private boolean satellite_style;
+
+    private LocalPoint point;
     private Message message;
     private Double test_latitude;
 
-    private OnFragmentInteractionListener mListener;
-    private MapboxMap mapboxMap;
+    private MapboxMap map;
     private MapView mMapView;
-    private PermissionsManager permissionsManager;
+    private ImageButton buttonSelectConstellation;
+    private ImageButton buttonGetLocation;
+    private ImageButton buttonSelectLayer;
+
+    private Style myStyle;
 
     public static MapFragment create() {
+
         return new MapFragment();
     }
 
-    public void retrievePoints(int id){
+    final Handler handler = new Handler();
+    Thread threadObj = new Thread() {
+        public void run() {
+
+            // Asynctask
+            System.out.println("Perform call");
+            Layer layer = map.getStyle().getLayer("layer-position");
+            map.getStyle().removeLayer("layer-position"); // Should remove layer
+            System.out.println("layer = " + layer);
+            // if (layer != null) {
+            // System.out.println("layer not null");
+            /*
+            if (VISIBLE.equals(layer.getVisibility().getValue())) {
+                layer.setProperties(visibility(NONE));
+            } else {
+                layer.setProperties(visibility(VISIBLE));
+            }
+            */
+            //}
+            // delay
+            handler.postDelayed(this, 1000);
+        }
+    };
+
+    public void retrievePoints(int id) {
         // FIREBASE SAMPLE
         // Get a reference to points
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -62,6 +137,10 @@ public class MapFragment extends Fragment{
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                point = dataSnapshot.getValue(LocalPoint.class);
+                System.out.println("Retrieved point from Firebase: " + point);
+                System.out.println("Retrieved latitude from Firebase: " + point.latitude);
+                System.out.println("Retrieved longitude from Firebase: " + point.longitude);
                 message = dataSnapshot.getValue(Message.class);
                 System.out.println("Retrieved point from Firebase: " + message);
                 System.out.println("Retrieved latitude from Firebase: " + message.getLatitude());
@@ -81,34 +160,102 @@ public class MapFragment extends Fragment{
         super.onCreate(savedInstanceState);
         Context ctx = getActivity().getApplicationContext();
         Mapbox.getInstance(ctx, "pk.eyJ1Ijoic2dvbmdvcmEiLCJhIjoiY2pyNjkxemhiMGR4MzQ4bXRkZHdhc2g4ayJ9.74xaSv0UpPG3bsZU0Z865w");
+        location_enabled = false;
+        satellite_style = false;
     }
 
-    // Create the map
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Context ctx = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_map, container, false);
+
+        // Register buttons
+        buttonSelectConstellation = v.findViewById(R.id.selectConstellation);
+        // registerForContextMenu(v.findViewById(R.id.selectConstellation));
+        registerForContextMenu(buttonSelectConstellation);
+        buttonGetLocation = v.findViewById(R.id.getLocation);
+        buttonGetLocation.setOnClickListener(this);
+        buttonSelectLayer = v.findViewById(R.id.selectLayer);
+        buttonSelectLayer.setOnClickListener(this);
+
+        // Create map
         mMapView = v.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState); // If this line is omitted there is a native crash in the MapBox library
-
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                // retrievePoints(1);
-                // System.out.println("Test latitude from Firebase: " + test_latitude);
-                // Retiro
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(40.415791, -3.683848))
-                        .title(getString(R.string.draw_marker_options_title_retiro))
-                        .snippet(getString(R.string.draw_marker_options_snippet_retiro)));
-                // Real Palace
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(40.418425, -3.713100))
-                        .title(getString(R.string.draw_marker_options_title_palace))
-                        .snippet(getString(R.string.draw_marker_options_snippet_palace)));
+            public void onMapReady(@NonNull MapboxMap mapboxMap) {
+                map = mapboxMap;
+                mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        // Add the initial position using custom marker
+                        style.addImage("marker-icon-id",
+                                BitmapFactory.decodeResource(getResources(),
+                                        R.drawable.mapbox_marker_icon_default));
+
+                        GeoJsonSource geoJsonSource = new GeoJsonSource("user-position",
+                                Feature.fromGeometry(Point.fromLngLat(-3.703790, 40.416775)));
+                        style.addSource(geoJsonSource);
+
+                        SymbolLayer symbolLayer = new SymbolLayer("layer-position", "user-position");
+                        symbolLayer.withProperties(
+                                PropertyFactory.iconImage("marker-icon-id")
+                        );
+                        buttonSelectLayer.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                toggleLayer();
+                            }
+                        });
+                        buttonGetLocation.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                getLocation();
+                            }
+                        });
+                        style.addLayer(symbolLayer);
+                    }
+                });
             }
         });
-
         return v;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.constellations, menu);
+        // loop for menu items
+        for (int i = 0; i < menu.size(); ++i) {
+            MenuItem mi = menu.getItem(i);
+            // check the Id as you wish
+            if (mi.getItemId() == R.id.gps) {
+                if (gps_selected) {
+                    mi.setChecked(true);
+                }
+            }
+            if (mi.getItemId() == R.id.galileo) {
+                if (galileo_selected) {
+                    mi.setChecked(true);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        // AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.gps:
+                gps_selected = !gps_selected;
+                return true;
+            case R.id.galileo:
+                galileo_selected = !galileo_selected;
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     public interface OnFragmentInteractionListener {
@@ -116,100 +263,34 @@ public class MapFragment extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
-
-    public void onMapReady(MapboxMap mapboxMap) {
-        MapFragment.this.mapboxMap = mapboxMap;
-//        enableLocationComponent();
-    }
-//
-//    @SuppressWarnings( {"MissingPermission"})
-//    private void enableLocationComponent() {
-//// Check if permissions are enabled and if not request
-//        if (PermissionsManager.areLocationPermissionsGranted(this)) {
-//
-//            LocationComponentOptions options = LocationComponentOptions.builder(this)
-//                    .trackingGesturesManagement(true)
-//                    .accuracyColor(ContextCompat.getColor(this, R.color.mapboxGreen))
-//                    .build();
-//
-//            // Get an instance of the component
-//            LocationComponent locationComponent = mapboxMap.getLocationComponent();
-//
-//            // Activate with options
-//            locationComponent.activateLocationComponent(this, options);
-//
-//            // Enable to make component visible
-//            locationComponent.setLocationComponentEnabled(true);
-//
-//            // Set the component's camera mode
-//            locationComponent.setCameraMode(CameraMode.TRACKING);
-//            locationComponent.setRenderMode(RenderMode.COMPASS);
-//        } else {
-//            permissionsManager = new PermissionsManager(this);
-//            permissionsManager.requestLocationPermissions(this);
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
-//
-//    @Override
-//    public void onExplanationNeeded(List<String> permissionsToExplain) {
-//        Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void onPermissionResult(boolean granted) {
-//        if (granted) {
-//            enableLocationComponent();
-//        } else {
-//            Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
-//            finish();
-//        }
-//    }
-
     @Override
-    @SuppressWarnings( {"MissingPermission"})
-    public void onStart() {
-        super.onStart();
-        mMapView.onStart();
+    public void onClick(View v) {
+
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
+    public void getLocation() {
+        System.out.println("location_enabled" + location_enabled);
+        if (!location_enabled) {
+            threadObj.start();
+            System.out.println("gps" + gps_selected);
+            System.out.println("galileo" +  galileo_selected);
+            location_enabled = true;
+        } else {
+            handler.removeCallbacks(threadObj);
+            location_enabled = false;
+        }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mMapView.onStop();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
+    // By now there are only two different layers
+    private void toggleLayer() {
+        if (satellite_style){
+            map.setStyle(Style.MAPBOX_STREETS);
+            satellite_style = false;
+            System.out.println("Streets style enabled");
+        }else{
+            map.setStyle(Style.SATELLITE_STREETS);
+            satellite_style = true;
+            System.out.println("Satellite style enabled");
+        }
     }
 }
