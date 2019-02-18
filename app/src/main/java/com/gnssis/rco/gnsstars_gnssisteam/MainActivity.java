@@ -13,65 +13,48 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.gnssis.rco.gnsstars_gnssisteam.database.Database;
 import com.gnssis.rco.gnsstars_gnssisteam.entity.Message;
 
 public class MainActivity extends AppCompatActivity implements  MainFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
+    private DataViewerAdapter mViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        initializeGNSStars();
 
         Database database = new Database();
         database.saveMessage(new Message("desc", "123", "321", "earth", "planet", "http://","title"));
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar_custom);
         setSupportActionBar(toolbar);
 
-        Spinner spinner = (Spinner)findViewById(R.id.spinnerCorrection);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.corrections, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //spinner.setAdapter(spinnerAdapter);
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position)+" selected", Toast.LENGTH_LONG);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//
-//        });
+    }
+
+    private void initializeGNSStars() {
+
+        //Initialize main view
+        setContentView(R.layout.activity_main);
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = findViewById(R.id.container);
+        mViewPagerAdapter = new DataViewerAdapter(getSupportFragmentManager());
+        mViewPagerAdapter.initialize();
+        mViewPager.setAdapter(mViewPagerAdapter);
+
+
+
+
     }
 
     @Override

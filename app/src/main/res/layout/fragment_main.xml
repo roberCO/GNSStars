@@ -13,28 +13,72 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp"></include>
 
+    <HorizontalScrollView
+        android:layout_width="340dp"
+        android:layout_height="150dp"
+
+        android:layout_marginBottom="930dp"
+        android:fillViewport="false"
+
+        android:scrollbars="none"
+        app:layout_anchorGravity="top|center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_custom">
+
+        <LinearLayout
+            android:id="@+id/constellations"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/switchFrequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="420dp"
+        android:layout_marginTop="650dp"
+        android:gravity="center"
+        android:text="Frequency     "
+        android:textColor="@color/colorPrimaryDark"
+        android:textOff="Single"
+        android:textOn="Dual"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:thumb="@drawable/sw_thumb"
+        app:layout_constraintBottom_toTopOf="@+id/app_bar_custom"
+        app:layout_constraintEnd_toStartOf="@+id/app_bar_custom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showText="true"
+        app:track="@drawable/sw_track" />
+
+
     <Spinner
         android:id="@+id/spinnerCorrection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="80dp"
-        android:layout_marginEnd="530dp"
-        android:layout_marginRight="530dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginEnd="400dp"
+        android:layout_marginBottom="250dp"
         android:background="@drawable/border_button"
 
         android:text="POSITION"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="40sp"
+        android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
 
 

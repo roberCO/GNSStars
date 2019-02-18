@@ -1,12 +1,23 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 
 /**
@@ -17,7 +28,7 @@ import android.view.ViewGroup;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements DataViewer{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,8 +74,67 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ViewGroup views;
+
+        views = (ViewGroup) inflater.inflate(R.layout.fragment_main, container, false);
+
+        /* Constellation roulette creation*/
+        LinearLayout constellation = views.findViewById(R.id.constellations);
+
+        LayoutInflater inflaterConstellations = (LayoutInflater) LayoutInflater.from(getApplicationContext());
+
+        for (int i=0; i<5; i++){
+
+            View viewConstellation = inflaterConstellations.inflate(R.layout.constellation, constellation, false);
+
+            TextView textConstellation = viewConstellation.findViewById(R.id.textWith);
+
+            ImageView imageViewConstellation = viewConstellation.findViewById(R.id.imageViewConstellation);
+
+            Resources res = getResources();
+            int[] constellationArray = res.getIntArray(R.array.constellations);
+
+            if(i==1) { //UE
+                textConstellation.setText(constellationArray[0]);
+                imageViewConstellation.setImageResource(R.drawable.eu);
+            } else if(i==0) {//USA
+                textConstellation.setText(constellationArray[1]);
+                imageViewConstellation.setImageResource(R.drawable.usa);
+            } else if(i==2) {//UE+USA
+                textConstellation.setText(constellationArray[2]);
+                imageViewConstellation.setImageResource(R.drawable.both);
+            } else if(i==3) {//GLONASS
+                textConstellation.setText(constellationArray[3]);
+                imageViewConstellation.setImageResource(R.drawable.rusia);
+            } else if(i==4) {//BeiDou
+                textConstellation.setText(constellationArray[4]);
+                imageViewConstellation.setImageResource(R.drawable.china);
+            }
+
+            constellation.addView(viewConstellation);
+        }
+
+        /* Spinner creation */
+        Spinner spinner = views.findViewById(R.id.spinnerCorrection);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.corrections, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+             @Override
+             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                 Toast.makeText(getApplicationContext(), parent.getItemAtPosition(position)+" selected", Toast.LENGTH_LONG);
+             }
+
+             @Override
+             public void onNothingSelected(AdapterView<?> parent) {
+
+             }
+
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return views;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +159,11 @@ public class MainFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onLocationFromGoogleServicesResult(Location location) {
+
     }
 
     /**

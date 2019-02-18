@@ -23,6 +23,14 @@
     <string name="user_location_permission_explanation">This app needs location permissions in order to show its functionality.</string>
     <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
 
+    <string-array name="constellations">
+        <item>GALILEO</item>
+        <item>GPS</item>
+        <item>GALILEO+GPS</item>
+        <item>GLONASS</item>
+        <item>BEIDOU</item>
+    </string-array>
+
     <string-array name="corrections">
         <item>Corrections</item>
         <item>Correction 1</item>

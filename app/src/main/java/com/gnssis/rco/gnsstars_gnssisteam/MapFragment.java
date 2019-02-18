@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,7 +72,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements View.OnClickListener{
+public class MapFragment extends Fragment implements View.OnClickListener, DataViewer{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -256,6 +257,11 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override
+    public void onLocationFromGoogleServicesResult(Location location) {
+
     }
 
     public interface OnFragmentInteractionListener {
