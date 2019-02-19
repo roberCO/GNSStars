@@ -87,28 +87,23 @@ public class MainFragment extends Fragment implements DataViewer{
         for (int i=0; i<5; i++){
 
             View viewConstellation = inflaterConstellations.inflate(R.layout.constellation, constellation, false);
-
+            ImageView imageViewConstellation = viewConstellation.findViewById(R.id.imageViewConstellation);
             TextView textConstellation = viewConstellation.findViewById(R.id.textWith);
 
-            ImageView imageViewConstellation = viewConstellation.findViewById(R.id.imageViewConstellation);
-
-            Resources res = getResources();
-            int[] constellationArray = res.getIntArray(R.array.constellations);
-
             if(i==1) { //UE
-                textConstellation.setText(constellationArray[0]);
+                textConstellation.setText(R.string.EUConstellation);
                 imageViewConstellation.setImageResource(R.drawable.eu);
             } else if(i==0) {//USA
-                textConstellation.setText(constellationArray[1]);
+                textConstellation.setText(R.string.USAConstellation);
                 imageViewConstellation.setImageResource(R.drawable.usa);
             } else if(i==2) {//UE+USA
-                textConstellation.setText(constellationArray[2]);
+                textConstellation.setText(R.string.EUUSAConstellation);
                 imageViewConstellation.setImageResource(R.drawable.both);
             } else if(i==3) {//GLONASS
-                textConstellation.setText(constellationArray[3]);
+                textConstellation.setText(R.string.RussiaConstellation);
                 imageViewConstellation.setImageResource(R.drawable.rusia);
             } else if(i==4) {//BeiDou
-                textConstellation.setText(constellationArray[4]);
+                textConstellation.setText(R.string.ChinaConstellation);
                 imageViewConstellation.setImageResource(R.drawable.china);
             }
 
@@ -123,7 +118,7 @@ public class MainFragment extends Fragment implements DataViewer{
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 Toast.makeText(getApplicationContext(), parent.getItemAtPosition(position)+" selected", Toast.LENGTH_LONG);
+
              }
 
              @Override
