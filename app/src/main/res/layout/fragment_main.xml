@@ -4,8 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background" />
+    </LinearLayout>
 
     <include
         android:id="@+id/app_bar_custom"
@@ -54,8 +63,10 @@
         android:thumb="@drawable/sw_thumb"
         app:layout_constraintBottom_toTopOf="@+id/app_bar_custom"
         app:layout_constraintEnd_toStartOf="@+id/app_bar_custom"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.481"
         app:showText="true"
         app:track="@drawable/sw_track" />
 
@@ -86,6 +97,7 @@
 
 
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toEndOf="@+id/app_bar_custom"
         app:layout_constraintTop_toBottomOf="@+id/app_bar_custom" />
 

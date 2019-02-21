@@ -1,29 +1,24 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.PointF;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.ContextMenu;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 
 import com.gnssis.rco.gnsstars_gnssisteam.entity.Message;
 import com.google.firebase.database.DataSnapshot;
@@ -31,38 +26,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mapbox.android.core.permissions.PermissionsManager;
+import com.google.gson.JsonElement;
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-
-import com.gnssis.rco.gnsstars_gnssisteam.LocalPoint;
-import com.mapbox.mapboxsdk.style.sources.VectorSource;
-
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleRadius;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,39 +56,28 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements View.OnClickListener, DataViewer{
+public class MapFragment extends Fragment implements View.OnClickListener, DataViewer, OnMapReadyCallback,
+        MapboxMap.OnMapClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    private MapboxMap map;
+    private Marker featureMarker;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    final Handler handler = new Handler();
     private SymbolManager symbolManager;
     private List<Symbol> symbols = new ArrayList<>();
     private MapView mapView;
-
     private boolean gps_selected;
     private boolean galileo_selected;
     private boolean location_enabled;
     private boolean satellite_style;
-
     private LocalPoint point;
     private Message message;
     private Double test_latitude;
 
-    private MapboxMap map;
-    private MapView mMapView;
-    private ImageButton buttonSelectConstellation;
-    private ImageButton buttonGetLocation;
-    private ImageButton buttonSelectLayer;
-
-    private Style myStyle;
-
-    public static MapFragment create() {
-
-        return new MapFragment();
-    }
-
-    final Handler handler = new Handler();
     Thread threadObj = new Thread() {
         public void run() {
 
@@ -127,6 +100,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
             handler.postDelayed(this, 1000);
         }
     };
+    private MapView mMapView;
+    private ImageButton buttonSelectConstellation;
+    private ImageButton buttonGetLocation;
+    private ImageButton buttonSelectLayer;
+    private Style myStyle;
+
+    public static MapFragment create() {
+        return new MapFragment();
+    }
 
     public void retrievePoints(int id) {
         // FIREBASE SAMPLE
@@ -189,6 +171,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
                 mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
+                        map.addOnMapClickListener(MapFragment.this);
                         // Add the initial position using custom marker
                         style.addImage("marker-icon-id",
                                 BitmapFactory.decodeResource(getResources(),
@@ -264,11 +247,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
 
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     @Override
     public void onClick(View v) {
 
@@ -279,7 +257,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
         if (!location_enabled) {
             threadObj.start();
             System.out.println("gps" + gps_selected);
-            System.out.println("galileo" +  galileo_selected);
+            System.out.println("galileo" + galileo_selected);
             location_enabled = true;
         } else {
             handler.removeCallbacks(threadObj);
@@ -289,14 +267,57 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
 
     // By now there are only two different layers
     private void toggleLayer() {
-        if (satellite_style){
+        if (satellite_style) {
             map.setStyle(Style.MAPBOX_STREETS);
             satellite_style = false;
             System.out.println("Streets style enabled");
-        }else{
+        } else {
             map.setStyle(Style.SATELLITE_STREETS);
             satellite_style = true;
             System.out.println("Satellite style enabled");
         }
+    }
+
+    @Override
+    public boolean onMapClick(@NonNull LatLng point) {
+        final PointF pixel = map.getProjection().toScreenLocation(point);
+        List<Feature> features = map.queryRenderedFeatures(pixel);
+
+        DetailFragment detailFragment = new DetailFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.map, detailFragment)
+                .addToBackStack(null)
+                .commit();
+
+        if (features.size() > 0) {
+            Feature feature = features.get(0);
+            String property;
+            StringBuilder stringBuilder = new StringBuilder();
+            if (feature.properties() != null) {
+                for (Map.Entry<String, JsonElement> entry : feature.properties().entrySet()) {
+                    stringBuilder.append(String.format("%s - %s", entry.getKey(), entry.getValue()));
+                    stringBuilder.append(System.getProperty("line.separator"));
+                }
+
+                featureMarker = map.addMarker(new MarkerOptions()
+                        .position(point)
+                        .title(feature.toJson())
+                        .snippet(stringBuilder.toString())
+                );
+
+            }
+        }
+        map.selectMarker(featureMarker);
+        return true;
+    }
+
+    @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

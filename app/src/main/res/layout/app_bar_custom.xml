@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/logo_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo"/>
+        android:layout_width="73dp"
+        android:layout_height="80dp"
+        android:src="@drawable/logo"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="6dp" />
 
 
     <TextView
         android:id="@+id/name_app"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
         android:text="GNSStars"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="45sp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="20dp"/>
+        android:textSize="40sp"
+        tools:layout_editor_absoluteX="90dp"
+        tools:layout_editor_absoluteY="6dp" />
 
 </android.support.constraint.ConstraintLayout>
