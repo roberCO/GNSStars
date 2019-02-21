@@ -116,7 +116,9 @@ public class MainFragment extends Fragment implements DataViewer{
         Spinner spinner = views.findViewById(R.id.spinnerCorrection);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.corrections, R.layout.main_spinner_option);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_options);
+        spinner.setSelection(0);
         spinner.setAdapter(spinnerAdapter);
+        spinner.setPopupBackgroundResource(R.color.white);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

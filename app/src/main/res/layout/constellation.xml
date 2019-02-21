@@ -24,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-light"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="20sp"
         />
 </LinearLayout>

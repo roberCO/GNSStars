@@ -3,27 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="75dp"
+    android:background="@color/blue"
+    android:elevation="10dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/logo_image"
-        android:layout_width="73dp"
-        android:layout_height="80dp"
-        android:src="@drawable/logo"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="6dp" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/logo"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/name_app"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/name_app"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.466" />
 
 
     <TextView
         android:id="@+id/name_app"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
         android:text="GNSStars"
+        android:paddingLeft="10dp"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="40sp"
-        tools:layout_editor_absoluteX="90dp"
-        tools:layout_editor_absoluteY="6dp" />
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.294"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
