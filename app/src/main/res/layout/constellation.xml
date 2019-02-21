@@ -15,13 +15,15 @@
         android:layout_height="80dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="0dp"
+        android:paddingBottom="0dp"
         app:srcCompat="@drawable/eu" />
 
     <TextView
         android:id="@+id/textWith"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
         android:textAlignment="center"

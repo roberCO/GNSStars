@@ -6,11 +6,13 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -112,8 +114,8 @@ public class MainFragment extends Fragment implements DataViewer{
 
         /* Spinner creation */
         Spinner spinner = views.findViewById(R.id.spinnerCorrection);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.corrections, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.corrections, R.layout.main_spinner_option);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_options);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
@@ -128,8 +130,23 @@ public class MainFragment extends Fragment implements DataViewer{
 
         });
 
+        Button button = (Button) views.findViewById(R.id.button2);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+               printData();
+            }
+        });
+
         // Inflate the layout for this fragment
         return views;
+    }
+
+    public void printData() {
+
+        Toast.makeText(getApplicationContext(), "Start logging GNSS data!", Toast.LENGTH_SHORT).show();
+        Log.d("Test message: ", "Logging data");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -22,21 +22,23 @@
     <!--Basic user location permission toasts-->
     <string name="user_location_permission_explanation">This app needs location permissions in order to show its functionality.</string>
 
+    <string name="rouletteConstellationTitle">CONSTELLATIONS</string>
+
     <string name="EUConstellation">GALILEO</string>
     <string name="USAConstellation">GPS</string>
     <string name="EUUSAConstellation">GALILEO+GPS</string>
     <string name="RussiaConstellation">GLONASS</string>
     <string name="ChinaConstellation">BEIDOU</string>
 
-    <string name="textSwitchButton">"Frequency     "</string>
+    <string name="textSwitchButton">"Frequency  "</string>
     <string name="option1SwitchButton">Single</string>
     <string name="option2SwitchButton">Dual</string>
 
     <string-array name="corrections">
-        <item>Corrections</item>
         <item>Correction 1</item>
         <item>Correction 2</item>
         <item>Correction 3</item>
+        <item>Correction 4</item>
     </string-array>
 
     <string name="textMainButton">POSITION</string>
