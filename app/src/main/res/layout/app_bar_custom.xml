@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="70dp"
     android:background="@color/blue"
     android:elevation="10dp">
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/roboto_regular"
         android:gravity="center_vertical"
         android:text="GNSStars"
         android:paddingLeft="10dp"

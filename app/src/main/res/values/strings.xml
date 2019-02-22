@@ -24,9 +24,9 @@
 
     <string name="rouletteConstellationTitle">CONSTELLATIONS</string>
 
-    <string name="EUConstellation">GALILEO</string>
+    <string name="EUConstellation">Galileo</string>
     <string name="USAConstellation">GPS</string>
-    <string name="EUUSAConstellation">GALILEO+GPS</string>
+    <string name="EUUSAConstellation">Galileo + GPS</string>
     <string name="RussiaConstellation">GLONASS</string>
     <string name="ChinaConstellation">BEIDOU</string>
 
@@ -42,4 +42,6 @@
     </string-array>
 
     <string name="textMainButton">POSITION</string>
+
+    <string name="headerOptions">Options</string>
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
 
     android:textSize="20sp"
-    android:fontFamily="sans-serif-light"
+    android:fontFamily="@font/roboto_regular"
     android:textColor="@color/black"
     android:background="@color/white"
     android:padding="10dp"

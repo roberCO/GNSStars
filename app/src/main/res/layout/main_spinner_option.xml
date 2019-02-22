@@ -6,7 +6,7 @@
 
     android:textSize="20sp"
     android:textColor="@color/black"
-    android:fontFamily="sans-serif-light"
+    android:fontFamily="@font/roboto_regular"
     >
 
 

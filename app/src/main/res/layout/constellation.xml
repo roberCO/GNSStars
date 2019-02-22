@@ -9,24 +9,46 @@
     tools:layout_editor_absoluteX="8dp"
     tools:layout_editor_absoluteY="8dp">
 
-    <ImageView
-        android:id="@+id/imageViewConstellation"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:background="@drawable/general_rounded_border"
+        android:elevation="10dp"
+        android:padding="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="0dp"
-        android:paddingBottom="0dp"
-        app:srcCompat="@drawable/eu" />
-
-    <TextView
-        android:id="@+id/textWith"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:textColor="@color/white"
-        android:fontFamily="sans-serif-light"
         android:textAlignment="center"
-        android:textSize="20sp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.835">
+
+        <ImageView
+            android:id="@+id/imageViewConstellation"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="0dp"
+            app:srcCompat="@drawable/eu" />
+
+        <TextView
+            android:id="@+id/textWith"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:textColor="@color/black"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/roboto_bold"
+            android:textAlignment="center"
+            android:gravity="bottom"
+            android:textSize="18sp"
+            />
+
+    </RelativeLayout>
+
 </LinearLayout>
