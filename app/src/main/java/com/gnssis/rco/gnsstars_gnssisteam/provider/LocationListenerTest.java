@@ -1,4 +1,4 @@
-package com.gnssis.rco.gnsstars_gnssisteam;
+package com.gnssis.rco.gnsstars_gnssisteam.provider;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -9,13 +9,11 @@ public class LocationListenerTest implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         /*System.out.println("on Location Changed");
-
         System.out.println(location.getLatitude() + "");
         System.out.println(location.getLongitude() + "");
         System.out.println(location.getProvider());
         System.out.println(location.getTime() + "");
         System.out.println(location.getAccuracy() + "");*/
-
     }
 
     @Override
