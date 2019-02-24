@@ -34,14 +34,29 @@
     <string name="option1SwitchButton">Single</string>
     <string name="option2SwitchButton">Dual</string>
 
-    <string-array name="corrections">
-        <item>Correction 1</item>
-        <item>Correction 2</item>
-        <item>Correction 3</item>
-        <item>Correction 4</item>
+    <string-array name="singleCorrections">
+        <item>Tropospheric</item>
+        <item>Klobuchar Iono</item>
+        <item>Relativistic path range</item>
     </string-array>
 
-    <string name="textMainButton">POSITION</string>
+    <string-array name="dualCorrections">
+        <item>Dual 1</item>
+        <item>Dual 2</item>
+        <item>Dual 3</item>
+    </string-array>
 
-    <string name="headerOptions">Options</string>
+    <string name="textSaveButton">SAVE</string>
+    <string name="textDiscardButton">DISCARD</string>
+
+    <string name="textMainButton">POSITION</string>
+    <string name="textMainButtonPressed">STOP</string>
+
+    <string name="positionStartText">Start logging GNSS data!</string>
+    <string name="positionStopText">Stop logging GNSS data!</string>
+    <string name="savedGNSSData">"GNSS data saved!"</string>
+    <string name="discardedGNSSData">"GNSS data discarded!"</string>
+
+
+    <string name="headerOptions">Constellations</string>
 </resources>
