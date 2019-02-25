@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">GNSStars_GNSSisTeam</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="draw_marker_options_title_retiro">Retiro Park</string>
+    <string name="draw_marker_options_snippet_retiro">Nature, Sun, Day</string>
+    <string name="draw_marker_options_title_palace">Real Palace</string>
+    <string name="draw_marker_options_snippet_palace">Building, Night, Moon</string>
+    <string name="pirates">Pirates</string>
+    <string name="ninjas">Ninjas</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="red">Red</string>
+    <string name="blue">Blue</string>
+    <string name="gps_selection">GPS</string>
+    <string name="galileo_selection">Galileo</string>
+    <string name="constellation_selection">Constellation selection</string>
+    <string name="layer_selection">Layer selection</string>
+    <string name="get_location">Get location</string>
+
+    <!--Basic user location permission toasts-->
+    <string name="user_location_permission_explanation">This app needs location permissions in order to show its functionality.</string>
+    <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
+    <string name="rouletteConstellationTitle">CONSTELLATIONS</string>
+
+    <string name="EUConstellation">Galileo</string>
+    <string name="USAConstellation">GPS</string>
+    <string name="EUUSAConstellation">Galileo + GPS</string>
+    <string name="RussiaConstellation">GLONASS</string>
+    <string name="ChinaConstellation">BEIDOU</string>
+
+    <string name="textSwitchButton">"Frequency  "</string>
+    <string name="option1SwitchButton">Single</string>
+    <string name="option2SwitchButton">Dual</string>
+
+    <string-array name="corrections">
+        <item>Correction 1</item>
+        <item>Correction 2</item>
+        <item>Correction 3</item>
+        <item>Correction 4</item>
+    </string-array>
+
+    <string name="textMainButton">POSITION</string>
+
+    <string name="headerOptions">Options</string>
+</resources>
