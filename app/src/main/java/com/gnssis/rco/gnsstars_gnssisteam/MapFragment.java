@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.gnssis.rco.gnsstars_gnssisteam.entity.Message;
 import com.google.firebase.database.DataSnapshot;
@@ -27,12 +28,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonElement;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -56,13 +62,13 @@ import java.util.Map;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements View.OnClickListener, DataViewer, OnMapReadyCallback,
-        MapboxMap.OnMapClickListener {
+public class MapFragment extends Fragment implements View.OnClickListener, DataViewer, OnMapReadyCallback, PermissionsListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
+    private PermissionsManager permissionsManager;
     private MapboxMap map;
-    private Marker featureMarker;
+    private LocationComponent locationComponent;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -167,18 +173,20 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
-                map = mapboxMap;
+                // map = mapboxMap;
+                MapFragment.this.map = mapboxMap;
+
                 mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
-                        map.addOnMapClickListener(MapFragment.this);
+                        // map.addOnMapClickListener(MapFragment.this);
                         // Add the initial position using custom marker
                         style.addImage("marker-icon-id",
                                 BitmapFactory.decodeResource(getResources(),
                                         R.drawable.mapbox_marker_icon_default));
 
                         GeoJsonSource geoJsonSource = new GeoJsonSource("user-position",
-                                Feature.fromGeometry(Point.fromLngLat(-3.703790, 40.416775)));
+                                Feature.fromGeometry(Point.fromLngLat(-3.703790, 45.416775)));
                         style.addSource(geoJsonSource);
 
                         SymbolLayer symbolLayer = new SymbolLayer("layer-position", "user-position");
@@ -194,10 +202,13 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
                         buttonGetLocation.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                getLocation();
+                                // locationComponent.getLocationComponentOptions();
+                                locationComponent.setCameraMode(CameraMode.TRACKING_COMPASS);
+
                             }
                         });
                         style.addLayer(symbolLayer);
+                        enableLocationComponent(style);
                     }
                 });
             }
@@ -279,39 +290,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
     }
 
     @Override
-    public boolean onMapClick(@NonNull LatLng point) {
-        final PointF pixel = map.getProjection().toScreenLocation(point);
-        List<Feature> features = map.queryRenderedFeatures(pixel);
-
-        DetailFragment detailFragment = new DetailFragment();
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.map, detailFragment)
-                .addToBackStack(null)
-                .commit();
-
-        if (features.size() > 0) {
-            Feature feature = features.get(0);
-            String property;
-            StringBuilder stringBuilder = new StringBuilder();
-            if (feature.properties() != null) {
-                for (Map.Entry<String, JsonElement> entry : feature.properties().entrySet()) {
-                    stringBuilder.append(String.format("%s - %s", entry.getKey(), entry.getValue()));
-                    stringBuilder.append(System.getProperty("line.separator"));
-                }
-
-                featureMarker = map.addMarker(new MarkerOptions()
-                        .position(point)
-                        .title(feature.toJson())
-                        .snippet(stringBuilder.toString())
-                );
-
-            }
-        }
-        map.selectMarker(featureMarker);
-        return true;
-    }
-
-    @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
     }
@@ -319,5 +297,55 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @SuppressWarnings( {"MissingPermission"})
+    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+        Context ctx = getActivity().getApplicationContext();
+        // Check if permissions are enabled and if not request
+        if (PermissionsManager.areLocationPermissionsGranted(ctx)) {
+            // Get an instance of the component
+            locationComponent = map.getLocationComponent();
+            // Activate with options
+            locationComponent.activateLocationComponent(ctx, loadedMapStyle);
+            // Enable to make component visible
+            locationComponent.setLocationComponentEnabled(true);
+            // Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING_COMPASS);
+            // Set the component's render mode
+            locationComponent.setRenderMode(RenderMode.COMPASS);
+            locationComponent.setLocationComponentEnabled(true);
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(getActivity());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+        Toast.makeText(getActivity(), R.string.user_location_permission_explanation,
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if (granted) {
+            map.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    enableLocationComponent(style);
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), R.string.user_location_permission_not_granted,
+                    Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }
     }
 }
