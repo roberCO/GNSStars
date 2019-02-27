@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-        android:fontFamily="@font/roboto_bold"
+        android:layout_margin="30dp"
+        android:fontFamily="@font/roboto_regular"
         android:gravity="bottom"
         android:text="@string/headerOptions"
         android:textAlignment="center"
@@ -40,29 +40,53 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.116"
+        app:layout_constraintVertical_bias="0.134"
         tools:text="Options" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@drawable/general_rounded_border"
+        android:layout_height="550dp"
+        android:background="@drawable/general_very_rounded_border"
         android:elevation="10dp"
-        android:padding="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.657">
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="40dp"
+            android:fillViewport="false"
+            android:scrollbars="none"
+            android:text="Options"
+            android:textColor="@color/white"
+            app:layout_anchorGravity="top|center"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/constellations"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:alpha="1"
+                android:orientation="horizontal"
+                android:textColor="@color/white" />
+        </HorizontalScrollView>
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/switchFrequency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="225dp"
             android:text="@string/textSwitchButton"
             android:textOff="@string/option1SwitchButton"
             android:textOn="@string/option2SwitchButton"
@@ -76,54 +100,26 @@
             style="@style/customSpinnerStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginVertical="310dp"
             android:spinnerMode="dialog" />
 
+        <Button
+            android:id="@+id/button2"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="80dp"
+            android:elevation="10dp"
+            android:text="@string/textMainButton"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/button2"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:elevation="10dp"
-        android:text="@string/textMainButton"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.84" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:fillViewport="false"
-        android:scrollbars="none"
-        android:text="Options"
-        android:textColor="@color/white"
-        app:layout_anchorGravity="top|center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.27">
-
-        <LinearLayout
-            android:id="@+id/constellations"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:alpha="1"
-            android:orientation="horizontal"
-            android:textColor="@color/white" />
-    </HorizontalScrollView>
 
 
 </android.support.constraint.ConstraintLayout>
