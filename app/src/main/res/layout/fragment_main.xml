@@ -23,46 +23,14 @@
             android:src="@drawable/earth" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/saveButon"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@color/green"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="600dp"
-        android:text="@string/textSaveButton"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/discardButon"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="600dp"
-        android:text="@string/textDiscardButton"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/headerOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-        android:fontFamily="@font/roboto_bold"
+        android:layout_margin="30dp"
+        android:fontFamily="@font/roboto_regular"
         android:gravity="bottom"
         android:text="@string/headerOptions"
         android:textAlignment="center"
@@ -73,55 +41,80 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.116"
+        app:layout_constraintVertical_bias="0.134"
         tools:text="Options" />
 
     <RelativeLayout
         android:id="@+id/containerCorrectionFrequency"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_height="450dp"
         android:background="@drawable/general_rounded_border"
         android:elevation="10dp"
-        android:padding="20dp"
+        android:paddingTop="20dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.657">
+        app:layout_constraintVertical_bias="0.572">
 
-        <android.support.v7.widget.SwitchCompat
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="40dp"
+            android:fillViewport="false"
+            android:scrollbars="none"
+            android:text="Options"
+            android:textColor="@color/white"
+            app:layout_anchorGravity="top|center"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/constellations"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:alpha="1"
+                android:orientation="horizontal"
+                android:textColor="@color/white" />
+        </HorizontalScrollView>
+
+        <LinearLayout
             android:id="@+id/switchFrequency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/textSwitchButton"
-            android:textOff="@string/option1SwitchButton"
-            android:textOn="@string/option2SwitchButton"
-            android:textSize="20sp"
-            android:thumb="@drawable/sw_thumb"
-            app:showText="true"
-            app:track="@drawable/sw_track" />
+            android:layout_marginTop="225dp">
+
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textSwitchButton"
+                android:textOff="@string/option1SwitchButton"
+                android:textOn="@string/option2SwitchButton"
+                android:textSize="20sp"
+                android:thumb="@drawable/sw_thumb"
+                app:showText="true"
+                app:track="@drawable/sw_track" />
+        </LinearLayout>
+
 
         <Spinner
             android:id="@+id/spinnerCorrection"
             style="@style/customSpinnerStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginVertical="310dp"
             android:spinnerMode="dialog" />
-
     </RelativeLayout>
 
     <Button
         android:id="@+id/positionButton"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@color/esaBlue"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -131,37 +124,12 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.84" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:fillViewport="false"
-        android:scrollbars="none"
-        android:textColor="@color/white"
-        app:layout_anchorGravity="top|center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.27">
-
-        <LinearLayout
-            android:id="@+id/constellations"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:alpha="1"
-            android:orientation="horizontal"
-            android:textColor="@color/white" />
-    </HorizontalScrollView>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
-        android:layout_width="400dp"
-        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
         android:fillViewport="false"
         android:scrollbars="none"
         android:textColor="@color/white"
@@ -170,8 +138,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.27">
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_custom"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:id="@+id/plot_scrollview"
@@ -181,5 +149,41 @@
             android:orientation="vertical"
             android:textColor="@color/white" />
     </ScrollView>
+
+    <Button
+        android:id="@+id/saveButon"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="200dp"
+        android:layout_marginBottom="60dp"
+        android:background="@color/green"
+        android:text="@string/textSaveButton"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/discardButon"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="200dp"
+        android:layout_marginBottom="60dp"
+        android:background="@color/grey"
+        android:text="@string/textDiscardButton"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

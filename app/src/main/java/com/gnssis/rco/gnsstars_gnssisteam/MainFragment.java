@@ -1,16 +1,10 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +29,7 @@ import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements DataViewer{
+public class MainFragment extends Fragment implements DataViewer {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -51,7 +45,7 @@ public class MainFragment extends Fragment implements DataViewer{
     private LinearLayout constellation;
     private ImageView imageViewConstellation;
     private TextView textConstellation;
-    private RelativeLayout swithOption;
+    private RelativeLayout switchOption;
     private Spinner spinner;
     private Button positionButton;
 
@@ -107,13 +101,13 @@ public class MainFragment extends Fragment implements DataViewer{
         initializeElements(view);
 
         /* Constellation Roulette*/
-        for (int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
 
             viewConstellation = inflaterConstellations.inflate(R.layout.constellation, constellation, false);
             imageViewConstellation = viewConstellation.findViewById(R.id.imageViewConstellation);
             textConstellation = viewConstellation.findViewById(R.id.textWith);
 
-            switch (i){
+            switch (i) {
                 case 0: //UE
                     textConstellation.setText(R.string.EUConstellation);
                     imageViewConstellation.setImageResource(R.drawable.eu);
@@ -140,12 +134,12 @@ public class MainFragment extends Fragment implements DataViewer{
         }
 
         /*Plots scroll*/
-        for (int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
 
             viewPlots = inflaterPlots.inflate(R.layout.plot_scrollview, plot, false);
             imageViewPlot = viewPlots.findViewById(R.id.imageViewPlot);
 
-            switch (i){
+            switch (i) {
                 case 0: //UE
                     imageViewPlot.setImageResource(R.drawable.plot1);
                     break;
@@ -175,15 +169,15 @@ public class MainFragment extends Fragment implements DataViewer{
         spinner.setAdapter(spinnerAdapter);
         spinner.setPopupBackgroundResource(R.color.white);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-             @Override
-             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-             }
+            }
 
-             @Override
-             public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-             }
+            }
 
         });
 
@@ -197,37 +191,37 @@ public class MainFragment extends Fragment implements DataViewer{
 
     private void defineBehaviourPositionButton(final View view) {
 
-        positionButton.setOnClickListener(new View.OnClickListener()
-        {
+        positionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-            plot.setVisibility(view.VISIBLE);
+                plot.setVisibility(view.VISIBLE);
 
-            spinner.setVisibility(view.INVISIBLE);
-            constellation.setVisibility(view.INVISIBLE);
-            swithOption.setVisibility(view.INVISIBLE);
-            headerOption.setVisibility(view.INVISIBLE);
+                spinner.setVisibility(view.INVISIBLE);
+                constellation.setVisibility(view.INVISIBLE);
+                switchOption.setVisibility(view.INVISIBLE);
+                headerOption.setVisibility(view.INVISIBLE);
 
-            if(positionButtonPressed) {
+                if (positionButtonPressed) {
 
-                Toast.makeText(getApplicationContext(), R.string.positionStopText, Toast.LENGTH_SHORT).show();
-                positionButton.setText(R.string.textMainButton);
-                saveButton.setVisibility(view.VISIBLE);
-                discardButton.setVisibility(view.VISIBLE);
+                    Toast.makeText(getApplicationContext(), R.string.positionStopText, Toast.LENGTH_SHORT).show();
+                    positionButton.setText(R.string.textMainButton);
+                    saveButton.setVisibility(view.VISIBLE);
+                    saveButton.bringToFront();
+                    discardButton.setVisibility(view.VISIBLE);
+                    discardButton.bringToFront();
 
+                    positionButtonPressed = false;
 
-                positionButtonPressed = false;
+                } else {
 
-            } else {
+                    Toast.makeText(getApplicationContext(), R.string.positionStartText, Toast.LENGTH_SHORT).show();
+                    positionButton.setText(R.string.textMainButtonPressed);
+                    saveButton.setVisibility(view.INVISIBLE);
+                    discardButton.setVisibility(view.INVISIBLE);
 
-                Toast.makeText(getApplicationContext(), R.string.positionStartText, Toast.LENGTH_SHORT).show();
-                positionButton.setText(R.string.textMainButtonPressed);
-                saveButton.setVisibility(view.INVISIBLE);
-                discardButton.setVisibility(view.INVISIBLE);
-
-                positionButtonPressed = true;
-            }
+                    positionButtonPressed = true;
+                }
 
             }
         });
@@ -248,7 +242,7 @@ public class MainFragment extends Fragment implements DataViewer{
 
                 spinner.setVisibility(view.VISIBLE);
                 constellation.setVisibility(view.VISIBLE);
-                swithOption.setVisibility(view.VISIBLE);
+                switchOption.setVisibility(view.VISIBLE);
                 headerOption.setVisibility(view.VISIBLE);
 
             }
@@ -258,8 +252,7 @@ public class MainFragment extends Fragment implements DataViewer{
 
     private void defineBehaviourDiscardButton(final View view) {
 
-        discardButton.setOnClickListener(new View.OnClickListener()
-        {
+        discardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -271,7 +264,7 @@ public class MainFragment extends Fragment implements DataViewer{
 
                 spinner.setVisibility(view.VISIBLE);
                 constellation.setVisibility(view.VISIBLE);
-                swithOption.setVisibility(view.VISIBLE);
+                switchOption.setVisibility(view.VISIBLE);
                 headerOption.setVisibility(view.VISIBLE);
 
             }
@@ -284,7 +277,7 @@ public class MainFragment extends Fragment implements DataViewer{
         inflaterConstellations = LayoutInflater.from(getApplicationContext());
         headerOption = view.findViewById(R.id.headerOptions);
         constellation = view.findViewById(R.id.constellations);
-        swithOption = view.findViewById(R.id.containerCorrectionFrequency);
+        switchOption = view.findViewById(R.id.containerCorrectionFrequency);
         spinner = view.findViewById(R.id.spinnerCorrection);
         positionButton = view.findViewById(R.id.positionButton);
 

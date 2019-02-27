@@ -8,7 +8,7 @@
     android:fontFamily="@font/roboto_regular"
     android:textColor="@color/black"
     android:background="@color/white"
-    android:padding="10dp"
+    android:padding="20dp"
     android:gravity="center_vertical"
     >
 

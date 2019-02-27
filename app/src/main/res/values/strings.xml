@@ -58,5 +58,5 @@
     <string name="discardedGNSSData">"GNSS data discarded!"</string>
 
 
-    <string name="headerOptions">Constellations</string>
+    <string name="headerOptions">Options</string>
 </resources>
