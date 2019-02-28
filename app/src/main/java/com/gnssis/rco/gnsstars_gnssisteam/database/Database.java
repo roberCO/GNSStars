@@ -29,8 +29,8 @@ public class Database {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Message newMessage = dataSnapshot.getValue(Message.class);
-                System.out.println("Message: " + newMessage.toString());
+                //Message newMessage = dataSnapshot.getValue(Message.class);
+                //System.out.println("Message: " + newMessage.toString());
             }
 
             @Override

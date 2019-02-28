@@ -38,31 +38,30 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.134"
+        app:layout_constraintVertical_bias="0.14"
         tools:text="Options" />
 
     <RelativeLayout
         android:id="@+id/containerCorrectionFrequency"
         android:layout_width="wrap_content"
-        android:layout_height="450dp"
+        android:layout_height="330dp"
         android:background="@drawable/general_rounded_border"
         android:elevation="10dp"
         android:paddingTop="20dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.572">
+        app:layout_constraintTop_toTopOf="parent">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="5dp"
             android:fillViewport="false"
             android:scrollbars="none"
             android:text="Options"
@@ -86,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="225dp">
+            android:layout_marginTop="185dp">
 
             <android.support.v7.widget.SwitchCompat
                 android:layout_width="wrap_content"
@@ -106,8 +105,9 @@
             style="@style/customSpinnerStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginVertical="310dp"
+            android:layout_marginBottom="30dp"
             android:spinnerMode="dialog" />
     </RelativeLayout>
 
@@ -118,6 +118,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:elevation="10dp"
         android:text="@string/textMainButton"
         android:textColor="@color/white"
@@ -129,7 +130,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="580dp"
         android:fillViewport="false"
         android:scrollbars="none"
         android:textColor="@color/white"
@@ -153,11 +154,11 @@
     <Button
         android:id="@+id/saveButon"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="200dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="78dp"
         android:background="@color/green"
         android:text="@string/textSaveButton"
         android:textColor="@color/white"
@@ -171,11 +172,11 @@
     <Button
         android:id="@+id/discardButon"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="200dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="78dp"
         android:background="@color/grey"
         android:text="@string/textDiscardButton"
         android:textColor="@color/white"
