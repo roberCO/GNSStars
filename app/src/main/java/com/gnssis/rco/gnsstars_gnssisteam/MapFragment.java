@@ -330,7 +330,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
         Toast.makeText(getActivity(), R.string.user_location_permission_explanation,
-                       Toast.LENGTH_LONG).show();
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -344,7 +344,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, DataV
             });
         } else {
             Toast.makeText(getActivity(), R.string.user_location_permission_not_granted,
-                           Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();
             getActivity().finish();
         }
     }

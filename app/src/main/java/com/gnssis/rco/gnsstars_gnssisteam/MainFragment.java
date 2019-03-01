@@ -1,12 +1,10 @@
 package com.gnssis.rco.gnsstars_gnssisteam;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,7 @@ import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements DataViewer{
+public class MainFragment extends Fragment implements DataViewer {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,6 +37,25 @@ public class MainFragment extends Fragment implements DataViewer{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private LayoutInflater inflaterConstellations;
+    private View viewConstellation;
+    private TextView headerOption;
+    private LinearLayout constellation;
+    private ImageView imageViewConstellation;
+    private TextView textConstellation;
+    private RelativeLayout switchOption;
+    private Spinner spinner;
+    private Button positionButton;
+
+    private View viewPlots;
+    private LayoutInflater inflaterPlots;
+    private LinearLayout plot;
+    private ImageView imageViewPlot;
+    private Button saveButton;
+    private Button discardButton;
+
+    private boolean positionButtonPressed = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,32 +98,61 @@ public class MainFragment extends Fragment implements DataViewer{
 
         views = (ViewGroup) inflater.inflate(R.layout.fragment_main, container, false);
 
-        /* Constellation roulette creation*/
-        LinearLayout constellation = views.findViewById(R.id.constellations);
+        /* Constellation Roulette*/
+        for (int i = 0; i < 5; i++) {
 
-        LayoutInflater inflaterConstellations = (LayoutInflater) LayoutInflater.from(getApplicationContext());
+            viewConstellation = inflaterConstellations.inflate(R.layout.constellation, constellation, false);
+            imageViewConstellation = viewConstellation.findViewById(R.id.imageViewConstellation);
+            textConstellation = viewConstellation.findViewById(R.id.textWith);
 
-        for (int i=0; i<5; i++){
+            switch (i) {
+                case 0: //UE
+                    textConstellation.setText(R.string.EUConstellation);
+                    imageViewConstellation.setImageResource(R.drawable.eu);
+                    break;
+                case 1: //USA
+                    textConstellation.setText(R.string.USAConstellation);
+                    imageViewConstellation.setImageResource(R.drawable.usa);
+                    break;
+                case 2: //UE+USA
+                    textConstellation.setText(R.string.EUUSAConstellation);
+                    imageViewConstellation.setImageResource(R.drawable.both);
+                    break;
+                case 3: //GLONASS
+                    textConstellation.setText(R.string.RussiaConstellation);
+                    imageViewConstellation.setImageResource(R.drawable.rusia);
+                    break;
+                case 4: //BeiDou
+                    textConstellation.setText(R.string.ChinaConstellation);
+                    imageViewConstellation.setImageResource(R.drawable.china);
+                    break;
+            }
 
-            View viewConstellation = inflaterConstellations.inflate(R.layout.constellation, constellation, false);
-            ImageView imageViewConstellation = viewConstellation.findViewById(R.id.imageViewConstellation);
-            TextView textConstellation = viewConstellation.findViewById(R.id.textWith);
+            constellation.addView(viewConstellation);
+        }
 
-            if(i==1) { //UE
-                textConstellation.setText(R.string.EUConstellation);
-                imageViewConstellation.setImageResource(R.drawable.eu);
-            } else if(i==0) {//USA
-                textConstellation.setText(R.string.USAConstellation);
-                imageViewConstellation.setImageResource(R.drawable.usa);
-            } else if(i==2) {//UE+USA
-                textConstellation.setText(R.string.EUUSAConstellation);
-                imageViewConstellation.setImageResource(R.drawable.both);
-            } else if(i==3) {//GLONASS
-                textConstellation.setText(R.string.RussiaConstellation);
-                imageViewConstellation.setImageResource(R.drawable.rusia);
-            } else if(i==4) {//BeiDou
-                textConstellation.setText(R.string.ChinaConstellation);
-                imageViewConstellation.setImageResource(R.drawable.china);
+        /*Plots scroll*/
+        for (int i = 0; i < 5; i++) {
+
+            viewPlots = inflaterPlots.inflate(R.layout.plot_scrollview, plot, false);
+            imageViewPlot = viewPlots.findViewById(R.id.imageViewPlot);
+
+            switch (i) {
+                case 0: //UE
+                    imageViewPlot.setImageResource(R.drawable.plot1);
+                    break;
+                case 1: //USA
+                    imageViewPlot.setImageResource(R.drawable.plot2);
+                    break;
+                case 2: //UE+USA
+                    imageViewPlot.setImageResource(R.drawable.plot3);
+                    break;
+                case 3: //GLONASS
+                    imageViewPlot.setImageResource(R.drawable.plot4);
+                    break;
+                case 4: //BeiDou
+                    imageViewPlot.setImageResource(R.drawable.plot1);
+                    break;
             }
 
             constellation.addView(viewConstellation);
@@ -120,24 +166,60 @@ public class MainFragment extends Fragment implements DataViewer{
         spinner.setAdapter(spinnerAdapter);
         spinner.setPopupBackgroundResource(R.color.white);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-             @Override
-             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-             }
+            }
 
-             @Override
-             public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-             }
+            }
 
         });
 
-        Button button = (Button) views.findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener()
-        {
+        defineBehaviourPositionButton(view);
+        defineBehaviourSaveButton(view);
+        defineBehaviourDiscardButton(view);
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void defineBehaviourPositionButton(final View view) {
+
+        positionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               printData();
+
+                plot.setVisibility(view.VISIBLE);
+
+                spinner.setVisibility(view.INVISIBLE);
+                constellation.setVisibility(view.INVISIBLE);
+                switchOption.setVisibility(view.INVISIBLE);
+                headerOption.setVisibility(view.INVISIBLE);
+
+                if (positionButtonPressed) {
+
+                    Toast.makeText(getApplicationContext(), R.string.positionStopText, Toast.LENGTH_SHORT).show();
+                    positionButton.setText(R.string.textMainButton);
+                    saveButton.setVisibility(view.VISIBLE);
+                    saveButton.bringToFront();
+                    discardButton.setVisibility(view.VISIBLE);
+                    discardButton.bringToFront();
+
+                    positionButtonPressed = false;
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), R.string.positionStartText, Toast.LENGTH_SHORT).show();
+                    positionButton.setText(R.string.textMainButtonPressed);
+                    saveButton.setVisibility(view.INVISIBLE);
+                    discardButton.setVisibility(view.INVISIBLE);
+
+                    positionButtonPressed = true;
+                }
+
             }
         });
 
@@ -145,7 +227,64 @@ public class MainFragment extends Fragment implements DataViewer{
         return views;
     }
 
-    public void printData() {
+    private void defineBehaviourSaveButton(final View view) {
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), R.string.savedGNSSData, Toast.LENGTH_SHORT).show();
+
+                plot.setVisibility(view.INVISIBLE);
+                saveButton.setVisibility(view.INVISIBLE);
+                discardButton.setVisibility(view.INVISIBLE);
+
+                spinner.setVisibility(view.VISIBLE);
+                constellation.setVisibility(view.VISIBLE);
+                switchOption.setVisibility(view.VISIBLE);
+                headerOption.setVisibility(view.VISIBLE);
+
+            }
+        });
+
+    }
+
+    private void defineBehaviourDiscardButton(final View view) {
+
+        discardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), R.string.discardedGNSSData, Toast.LENGTH_SHORT).show();
+
+                plot.setVisibility(view.INVISIBLE);
+                saveButton.setVisibility(view.INVISIBLE);
+                discardButton.setVisibility(view.INVISIBLE);
+
+                spinner.setVisibility(view.VISIBLE);
+                constellation.setVisibility(view.VISIBLE);
+                switchOption.setVisibility(view.VISIBLE);
+                headerOption.setVisibility(view.VISIBLE);
+
+            }
+        });
+
+    }
+
+    private void initializeElements(View view) {
+
+        inflaterConstellations = LayoutInflater.from(getApplicationContext());
+        headerOption = view.findViewById(R.id.headerOptions);
+        constellation = view.findViewById(R.id.constellations);
+        switchOption = view.findViewById(R.id.containerCorrectionFrequency);
+        spinner = view.findViewById(R.id.spinnerCorrection);
+        positionButton = view.findViewById(R.id.positionButton);
+
+        inflaterPlots = LayoutInflater.from(getApplicationContext());
+        plot = view.findViewById(R.id.plot_scrollview);
+        saveButton = view.findViewById(R.id.saveButon);
+        discardButton = view.findViewById(R.id.discardButon);
+
 
         Toast.makeText(getApplicationContext(), "Start logging GNSS data!", Toast.LENGTH_SHORT).show();
         Log.d("Test message: ", "Logging data");

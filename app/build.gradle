@@ -30,6 +30,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.6'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.1.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v7:0.5.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    // https://mvnrepository.com/artifact/org.ejml/ejml-simple
+    implementation group: 'org.ejml', name: 'ejml-simple', version: '0.32'
+    implementation 'commons-net:commons-net:3.3'
 }
 
 apply plugin: 'com.google.gms.google-services'
