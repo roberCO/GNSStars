@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,9 +95,10 @@ public class MainFragment extends Fragment implements DataViewer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup views;
+        View view;
+        view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        views = (ViewGroup) inflater.inflate(R.layout.fragment_main, container, false);
+        initializeElements(view);
 
         /* Constellation Roulette*/
         for (int i = 0; i < 5; i++) {
@@ -155,12 +157,13 @@ public class MainFragment extends Fragment implements DataViewer {
                     break;
             }
 
-            constellation.addView(viewConstellation);
+            plot.addView(viewPlots);
         }
 
+        plot.setVisibility(view.INVISIBLE);
+
         /* Spinner creation */
-        Spinner spinner = views.findViewById(R.id.spinnerCorrection);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.corrections, R.layout.main_spinner_option);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.singleCorrections, R.layout.main_spinner_option);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_options);
         spinner.setSelection(0);
         spinner.setAdapter(spinnerAdapter);
@@ -223,8 +226,6 @@ public class MainFragment extends Fragment implements DataViewer {
             }
         });
 
-        // Inflate the layout for this fragment
-        return views;
     }
 
     private void defineBehaviourSaveButton(final View view) {
@@ -243,6 +244,8 @@ public class MainFragment extends Fragment implements DataViewer {
                 constellation.setVisibility(view.VISIBLE);
                 switchOption.setVisibility(view.VISIBLE);
                 headerOption.setVisibility(view.VISIBLE);
+
+
 
             }
         });
@@ -286,8 +289,6 @@ public class MainFragment extends Fragment implements DataViewer {
         discardButton = view.findViewById(R.id.discardButon);
 
 
-        Toast.makeText(getApplicationContext(), "Start logging GNSS data!", Toast.LENGTH_SHORT).show();
-        Log.d("Test message: ", "Logging data");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

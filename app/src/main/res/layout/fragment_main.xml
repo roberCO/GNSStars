@@ -15,6 +15,7 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.6"
@@ -44,6 +45,7 @@
         tools:text="Options" />
 
     <RelativeLayout
+        android:id="@+id/containerCorrectionFrequency"
         android:layout_width="wrap_content"
         android:layout_height="330dp"
         android:background="@drawable/general_rounded_border"
